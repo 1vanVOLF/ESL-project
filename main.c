@@ -63,10 +63,10 @@ static uint8_t const m_digit_blinks[DEVICE_ID_DIGIT_COUNT] = {6, 5, 7, 8};
 /* Map each digit position to the LED that represents it. See file header
  * for why LED_R is reused for the 4th digit on the stock PCA10059 board. */
 #if defined(BOARD_PCA10059)
-    #define LED_PIN_0   LED2_R
-    #define LED_PIN_1   LED2_G
-    #define LED_PIN_2   LED2_B
-    #define LED_PIN_3   LED2_R   /* reused: dongle only has one RGB LED */
+    #define LED_PIN_0   LED1_G
+    #define LED_PIN_1   LED2_R
+    #define LED_PIN_2   LED2_G
+    #define LED_PIN_3   LED2_B   /* reused: dongle only has one RGB LED */
 #else
     #define LED_PIN_0   BSP_LED_0
     #define LED_PIN_1   BSP_LED_1

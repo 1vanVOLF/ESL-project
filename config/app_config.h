@@ -78,7 +78,7 @@
 // <e> LOG_BACKEND_USB_ENABLED - log_backend_usb - Log USB backend
 //==========================================================
 #ifndef LOG_BACKEND_USB_ENABLED
-#define LOG_BACKEND_USB_ENABLED 0
+#define LOG_BACKEND_USB_ENABLED 1
 #endif
 
 // <o> LOG_BACKEND_USB_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
