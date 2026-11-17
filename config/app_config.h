@@ -81,6 +81,10 @@
 #define LOG_BACKEND_USB_ENABLED 1
 #endif
 
+#ifndef NRF_LOG_BACKEND_USB_ENABLED 
+#define NRF_LOG_BACKEND_USB_ENABLED 1
+#endif
+
 // <o> LOG_BACKEND_USB_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
 // <i> Size of the buffer is a trade-off between RAM usage and processing.
 // <i> if buffer is smaller then strings will often be fragmented.
@@ -127,7 +131,6 @@
 
 // </e>
 
-// --- Включаем PWM для работы ---
 #ifndef NRFX_PWM_ENABLED
 #define NRFX_PWM_ENABLED 1
 #endif

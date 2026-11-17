@@ -39,7 +39,6 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/ringbuf/nrf_ringbuf.c \
   $(SDK_ROOT)/components/libraries/strerror/nrf_strerror.c \
   $(SDK_ROOT)/components/libraries/timer/app_timer2.c \
-  $(SDK_ROOT)/components/libraries/experimental_section_vars/nrf_section_iter.c \
   $(SDK_ROOT)/modules/nrfx/soc/nrfx_atomic.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_pwm.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
@@ -51,26 +50,15 @@ SRC_FILES += \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_power.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd_core.c \
-  $(SDK_ROOT)/components/libraries/usbd/app_usbd_string_desc.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd_serial_num.c \
   $(SDK_ROOT)/components/libraries/usbd/class/cdc/acm/app_usbd_cdc_acm.c \
   $(SDK_ROOT)/components/libraries/scheduler/app_scheduler.c \
+  $(PROJ_DIR)/logs.c \
+  $(PROJ_DIR)/button.c \
+  $(PROJ_DIR)/pwm_led.c \
   $(PROJ_DIR)/main.c \
   $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
-  $(LOG_BACKEND_USB_SRC_FILE) \
 
-# ---------------------------------------------------------------------
-# !!! SEE README.md !!!
-# This repo's own `components/libraries/log/src/log_backend_usb.c` (or
-# wherever its log_backend_usb module actually lives) must be added
-# above via LOG_BACKEND_USB_SRC_FILE, or NRF_LOG_DEFAULT_BACKENDS_INIT()
-# will fail to link because app_config.h's LOG_BACKEND_USB_ENABLED=1
-# expects that backend's object file to exist. I could not fetch this
-# repo's tree to find the exact path, so point LOG_BACKEND_USB_SRC_FILE
-# at the right file for your checkout, e.g.:
-#   LOG_BACKEND_USB_SRC_FILE := $(SDK_ROOT)/../log_backend_usb/log_backend_usb.c
-# or wherever dongle_logs' own Makefile references it from.
-LOG_BACKEND_USB_SRC_FILE ?=
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -114,8 +102,6 @@ LIB_FILES += \
 
 # Optimization flags
 OPT = -O3 -g3
-# Uncomment the line below to enable link time optimization
-#OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
@@ -132,7 +118,6 @@ CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
 CFLAGS += -Wall -Werror
 CFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
-# keep every function in a separate section, this allows linker to discard unused ones
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
 CFLAGS += -fno-builtin -fshort-enums
 
