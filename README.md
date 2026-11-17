@@ -35,7 +35,7 @@ The device ID is `#6578`. The sequence is defined in `main.c` and follows the sa
     3.  **LED Off**: The LED is off, counting down the `BLINK_OFF_MS` before the next blink.
 
 ## How to Build and Flash
-1. Open the terminal in the directory containing the `Makefile` (`.../blinky/pca10059/blank/armgcc`).
+1. Open the terminal in the root directory of the project (where the `Makefile` is located).
 2. Put the dongle into bootloader mode by pressing the **RESET** button (the red LED should start blinking).
 3. Run the flash command (this automatically builds the project, packages it, and flashes the dongle):
    ```bash
