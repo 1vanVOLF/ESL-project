@@ -1,10 +1,4 @@
-/* hsv_color.c
- *
- * Implementation of the HSV -> RGB conversion.
- */
-
 #include "hsv_color.h"
-
 #include <math.h>
 
 rgb_t hsv_to_rgb(uint16_t h, uint8_t s, uint8_t v)

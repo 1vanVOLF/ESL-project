@@ -1,9 +1,3 @@
-/* logs.c
- *
- * Same approach as used in Workshop_4: NRF_LOG_INIT + the SDK's default
- * backends, selected entirely through sdk_config.h.
- */
-
 #include "logs.h"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -20,10 +14,7 @@ void logs_init(void)
 
 void logs_process(void)
 {
-    while (app_usbd_event_queue_process())
-    {
-        /* drain all queued USB events */
-    }
+    while (app_usbd_event_queue_process()) {}
 
     NRF_LOG_PROCESS();
 }

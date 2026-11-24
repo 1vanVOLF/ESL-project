@@ -101,8 +101,7 @@ LIB_FILES += \
 
 # Optimization flags
 OPT = -O3 -g3
-# Uncomment the line below to enable link time optimization
-#OPT += -flto
+
 
 # C flags common to all targets
 CFLAGS += $(OPT)
@@ -111,7 +110,6 @@ CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DMBR_PRESENT
 CFLAGS += -DNRF52840_XXAA
-# Selects which RTC instance app_timer2 (components/libraries/timer) uses.
 CFLAGS += -DAPP_TIMER_V2
 CFLAGS += -DAPP_TIMER_V2_RTC1_ENABLED
 CFLAGS += -DUSE_APP_CONFIG
@@ -120,7 +118,6 @@ CFLAGS += -mthumb -mabi=aapcs
 CFLAGS += -Wall -Werror
 CFLAGS += -Wno-array-bounds
 CFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
-# keep every function in a separate section, this allows linker to discard unused ones
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
 CFLAGS += -fno-builtin -fshort-enums
 
@@ -145,9 +142,7 @@ LDFLAGS += $(OPT)
 LDFLAGS += -mthumb -mabi=aapcs -L$(SDK_ROOT)/modules/nrfx/mdk -T$(LINKER_SCRIPT)
 LDFLAGS += -mcpu=cortex-m4
 LDFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
-# let linker dump unused sections
 LDFLAGS += -Wl,--gc-sections
-# use newlib in nano version
 LDFLAGS += --specs=nano.specs
 
 nrf52840_xxaa: CFLAGS += -D__HEAP_SIZE=8192
@@ -155,10 +150,7 @@ nrf52840_xxaa: CFLAGS += -D__STACK_SIZE=8192
 nrf52840_xxaa: ASMFLAGS += -D__HEAP_SIZE=8192
 nrf52840_xxaa: ASMFLAGS += -D__STACK_SIZE=8192
 
-# Add standard libraries at the very end of the linker input, after all objects
-# that may need symbols provided by these libraries.
-# -lm is required because the HSV <-> RGB conversion in hsv_color.c uses
-# floating point math functions (fabsf, fmodf).
+
 LIB_FILES += -lc -lnosys -lm
 
 .PHONY: default help

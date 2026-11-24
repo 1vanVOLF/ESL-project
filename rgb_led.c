@@ -1,8 +1,3 @@
-/* rgb_led.c
- *
- * Implementation of the RGB LED PWM driver.
- */
-
 #include "rgb_led.h"
 #include "board_config.h"
 
@@ -11,7 +6,7 @@
 #include "nrfx_pwm.h"
 #include "app_error.h"
 
-#define PWM_TOP_VALUE   255   /* 8-bit resolution, 0..255 */
+#define PWM_TOP_VALUE   255
 
 static nrfx_pwm_t m_pwm0 = NRFX_PWM_INSTANCE(0);
 static nrf_pwm_values_individual_t m_pwm_seq_values;
@@ -29,10 +24,10 @@ void rgb_led_init(void)
     {
         .output_pins =
         {
-            LED2_R | NRFX_PWM_PIN_INVERTED, /* channel 0 -> red   */
-            LED2_G | NRFX_PWM_PIN_INVERTED, /* channel 1 -> green */
-            LED2_B | NRFX_PWM_PIN_INVERTED, /* channel 2 -> blue  */
-            NRFX_PWM_PIN_NOT_USED           /* channel 3 -> unused */
+            LED2_R | NRFX_PWM_PIN_INVERTED,
+            LED2_G | NRFX_PWM_PIN_INVERTED,
+            LED2_B | NRFX_PWM_PIN_INVERTED,
+            NRFX_PWM_PIN_NOT_USED           
         },
         .irq_priority = APP_IRQ_PRIORITY_LOWEST,
         .base_clock   = NRF_PWM_CLK_1MHz,
@@ -50,9 +45,7 @@ void rgb_led_init(void)
     m_pwm_seq_values.channel_3 = 0;
 }
 
-/* Because NRFX_PWM_PIN_INVERTED is used on all three channels, a duty value
- * here directly represents brightness: 0 = LED off, PWM_TOP_VALUE = full on.
- * The driver takes care of inverting the signal for the active-low LEDs. */
+
 static void rgb_led_write(rgb_t rgb)
 {
     m_pwm_seq_values.channel_0 = rgb.r;

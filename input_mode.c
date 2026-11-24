@@ -1,8 +1,3 @@
-/* input_mode.c
- *
- * Implementation of input mode cycling and LED1 indication.
- */
-
 #include "input_mode.h"
 #include "board_config.h"
 
@@ -10,9 +5,8 @@
 
 #include "nrf_gpio.h"
 
-/* LED1 blink periods (half-period, i.e. toggle interval) */
-#define LED1_BLINK_SLOW_MS   500   /* Hue mode: slow blink */
-#define LED1_BLINK_FAST_MS   120   /* Saturation mode: fast blink */
+#define LED1_BLINK_SLOW_MS   500
+#define LED1_BLINK_FAST_MS   120 
 
 static input_mode_t g_mode = MODE_NONE;
 
@@ -21,7 +15,6 @@ static uint32_t g_led1_timer_ms = 0;
 
 static void led1_set(bool on)
 {
-    /* active low */
     if (on)
     {
         nrf_gpio_pin_clear(LED1_G);
