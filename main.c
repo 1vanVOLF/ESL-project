@@ -1,37 +1,61 @@
 #include <stdbool.h>
-#include <stdint.h>
-#include "nrf_delay.h"
-#include "boards.h"
+#include "nrf_drv_clock.h"
+#include "app_error.h"
+#include "app_timer.h"
 
-/* Device ID: 6578 -> LED1 x6, red x5, green x7, blue x8 */
-#define DEVICE_ID_DIGITS   4
-#define BLINK_ON_MS        300
-#define BLINK_OFF_MS       300
-#define PAUSE_BETWEEN_MS   1000
+#include "board_config.h"
+#include "hsv_color.h"
+#include "rgb_led.h"
+#include "input_mode.h"
+#include "button_handler.h"
+#include "app_timer_tick.h"
+#include "logs.h"
+#include "nrf_log_ctrl.h"
 
-static const uint8_t blink_count[DEVICE_ID_DIGITS] = {6, 5, 7, 8};
+static hsv_t g_hsv = {
+    .hue        = DEFAULT_HUE_DEG,
+    .saturation = DEFAULT_SATURATION,
+    .value      = DEFAULT_VALUE
+};
 
-static void blink_led(uint32_t led, uint8_t times)
+static void clock_init(void)
 {
-    for (uint8_t i = 0; i < times; i++)
-    {
-        bsp_board_led_on(led);
-        nrf_delay_ms(BLINK_ON_MS);
-        bsp_board_led_off(led);
-        nrf_delay_ms(BLINK_OFF_MS);
-    }
+    ret_code_t err_code = nrf_drv_clock_init();
+    APP_ERROR_CHECK(err_code);
+    nrf_drv_clock_lfclk_request(NULL);
+    while (!nrf_drv_clock_lfclk_is_running()) { __WFE(); }
+}
+
+static void on_app_tick(uint32_t dt_ms)
+{
+    button_handler_tick(dt_ms, &g_hsv);
+    input_mode_led_update(dt_ms);
+    rgb_led_set_hsv(g_hsv);
+    NRF_LOG_FLUSH(); // Принудительно сбрасываем логи каждый тик
 }
 
 int main(void)
 {
-    bsp_board_init(BSP_INIT_LEDS);
+    ret_code_t err_code;
+
+    clock_init();                 // 1. LFCLK
+
+    err_code = app_timer_init();  // 2. app_timer
+    APP_ERROR_CHECK(err_code);
+
+    logs_init();                  // 3. USB логи
+
+    input_mode_init();
+    button_handler_init();
+    rgb_led_init();
+
+    rgb_led_set_hsv(g_hsv);
+
+    app_timer_tick_init(on_app_tick);
 
     while (true)
     {
-        for (uint32_t led = 0; led < DEVICE_ID_DIGITS; led++)
-        {
-            blink_led(led, blink_count[led]);
-            nrf_delay_ms(PAUSE_BETWEEN_MS);
-        }
+        logs_process();
+        __WFE();
     }
 }
