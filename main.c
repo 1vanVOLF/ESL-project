@@ -38,7 +38,8 @@ static void clock_init(void)
 
 static void on_app_tick(uint32_t dt_ms)
 {
-    button_handler_tick(dt_ms, &g_hsv);
+    /* Button handling is now entirely interrupt/timer driven, so the
+     * periodic tick only updates the LED1 mode indication and the RGB LED. */
     input_mode_led_update(dt_ms);
     rgb_led_set_hsv(g_hsv);
 }
@@ -54,15 +55,16 @@ int main(void)
 
     logs_init();
 
+    NRF_LOG_INFO("Startup: mode = No input, H=%d S=%d V=%d",
+                 g_hsv.hue, g_hsv.saturation, g_hsv.value);
+    NRF_LOG_FLUSH();
+    
     input_mode_init();
-    button_handler_init();
+    button_handler_init(&g_hsv);
     rgb_led_init();
 
     rgb_led_set_hsv(g_hsv);
 
-    NRF_LOG_INFO("Startup: mode = No input, H=%d S=%d V=%d",
-                 g_hsv.hue, g_hsv.saturation, g_hsv.value);
-    NRF_LOG_FLUSH();
 
     app_timer_tick_init(on_app_tick);
 
