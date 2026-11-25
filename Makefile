@@ -40,6 +40,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/timer/app_timer2.c \
   $(SDK_ROOT)/modules/nrfx/soc/nrfx_atomic.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_pwm.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_nvmc.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
@@ -57,6 +58,7 @@ SRC_FILES += \
   $(PROJ_DIR)/rgb_led.c \
   $(PROJ_DIR)/input_mode.c \
   $(PROJ_DIR)/button_handler.c \
+  $(PROJ_DIR)/color_storage.c \
   $(PROJ_DIR)/app_timer_tick.c \
   $(PROJ_DIR)/main.c \
   $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
@@ -179,7 +181,7 @@ $(DFU_PACKAGE): $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
 	nrfutil pkg generate \
 	--hw-version 52 \
 	--application-version 1 \
-	--sd-req 0x0,0x102 \
+	--sd-req 0x102 \
 	--sd-id 0x102 \
 	--application $< $@
 

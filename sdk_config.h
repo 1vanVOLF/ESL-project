@@ -3199,6 +3199,14 @@
 #endif
 // </e>
 
+// <e> NRFX_NVMC_ENABLED - nrfx_nvmc - NVMC peripheral driver
+// Required by color_storage.c to persist the last HSV color in flash.
+//==========================================================
+#ifndef NRFX_NVMC_ENABLED
+#define NRFX_NVMC_ENABLED 1
+#endif
+// </e>
+
 // <e> NRFX_GPIOTE_ENABLED - nrfx_gpiote - GPIOTE peripheral driver
 //==========================================================
 #ifndef NRFX_GPIOTE_ENABLED

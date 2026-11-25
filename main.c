@@ -9,6 +9,7 @@
 #include "input_mode.h"
 #include "button_handler.h"
 #include "app_timer_tick.h"
+#include "color_storage.h"
 #include "logs.h"
 
 #include "nrf_log.h"
@@ -38,7 +39,6 @@ static void clock_init(void)
 
 static void on_app_tick(uint32_t dt_ms)
 {
-    button_handler_tick(dt_ms, &g_hsv);
     input_mode_led_update(dt_ms);
     rgb_led_set_hsv(g_hsv);
 }
@@ -54,15 +54,22 @@ int main(void)
 
     logs_init();
 
+    if (color_storage_load(&g_hsv))
+    {
+        NRF_LOG_INFO("Startup: restored saved color, H=%d S=%d V=%d", g_hsv.hue, g_hsv.saturation, g_hsv.value);
+    }
+    else
+    {
+        NRF_LOG_INFO("Startup: no saved color, using default H=%d S=%d V=%d", g_hsv.hue, g_hsv.saturation, g_hsv.value);
+    }
+    NRF_LOG_FLUSH();
+
     input_mode_init();
-    button_handler_init();
+    button_handler_init(&g_hsv);
     rgb_led_init();
 
     rgb_led_set_hsv(g_hsv);
 
-    NRF_LOG_INFO("Startup: mode = No input, H=%d S=%d V=%d",
-                 g_hsv.hue, g_hsv.saturation, g_hsv.value);
-    NRF_LOG_FLUSH();
 
     app_timer_tick_init(on_app_tick);
 
